@@ -19,6 +19,11 @@ apt_install() {
   sudo apt install $APT_INSTALLS_STRING
 }
 
+append_line_if_missing() {
+  local line="$1"
+  grep -qxF "$line" "$SHELL_CONFIG_FILE" || echo "$line" >> "$SHELL_CONFIG_FILE"
+}
+
 install_neovim() {
   mkdir -p ~/.local/bin
   wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
@@ -35,7 +40,7 @@ install_mise() {
     sudo apt update -y
     sudo apt install -y mise
 
-    echo 'eval "$(/usr/bin/mise activate bash)"' >> $SHELL_CONFIG_FILE
+    append_line_if_missing 'eval "$(/usr/bin/mise activate bash)"'
   fi
 }
 
@@ -43,7 +48,7 @@ install_atuin() {
   if ! command -v atuin > /dev/null 2>&1; then
     # bash-preexec: required for using atuin in bash.
     curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o ~/.bash-preexec.sh
-    echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> $SHELL_CONFIG_FILE
+    append_line_if_missing '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'
     # Install atuin
     curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh
     atuin import bash
@@ -63,9 +68,8 @@ main() {
   # Source - https://stackoverflow.com/a/246128
   SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &> /dev/null && pwd)
 
-  # Backup current shell config and create an empty one
-  mv $SHELL_CONFIG_FILE $SHELL_CONFIG_FILE\.bak
-  touch $SHELL_CONFIG_FILE
+  # Preserve any existing shell config and only add our source line once.
+  touch "$SHELL_CONFIG_FILE"
 
   apt_install
   install_neovim
@@ -74,9 +78,10 @@ main() {
   install_zoxide
 
   CUSTOM_CONFIG_FILENAME="bash_config.sh"
-  echo "source ${SCRIPT_DIR}/${CUSTOM_CONFIG_FILENAME}" >> $SHELL_CONFIG_FILE
+  SOURCE_LINE="source ${SCRIPT_DIR}/${CUSTOM_CONFIG_FILENAME}"
+  append_line_if_missing "$SOURCE_LINE"
 
-  . $SHELL_CONFIG_FILE
+  . "$SHELL_CONFIG_FILE"
 }
 
 main
