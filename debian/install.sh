@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 APT_INSTALLS=(
   bat
@@ -8,6 +8,7 @@ APT_INSTALLS=(
   ripgrep
   fd-find
   btop
+  wget
 )
 
 apt_install() {
@@ -19,6 +20,7 @@ apt_install() {
 }
 
 install_neovim() {
+  mkdir -p ~/.local/bin
   wget https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.appimage
   chmod u+x ./nvim-linux-x86_64.appimage
   mv ./nvim-linux-x86_64.appimage ~/.local/bin/nvim

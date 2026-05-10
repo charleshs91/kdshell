@@ -1,13 +1,9 @@
-setup_fdfind() {
-  if command -v fdfind > /dev/null 2>&1; then
-    alias fd='fdfind'
-  fi
+alias_if_exists() {
+  command -v "$1" >/dev/null 2>&1 && alias "$2=$1"
 }
 
 setup_ls() {
-  if command -v eza > /dev/null 2>&1; then
-    alias ls='eza'
-  fi
+  alias_if_exists eza ls
 
   alias l='ls'
   alias la='ls -a'
@@ -15,29 +11,13 @@ setup_ls() {
   alias lal='ls -lah'
 }
 
-setup_bat() {
-  if command -v batcat > /dev/null 2>&1; then
-    alias bat='batcat'
-  fi
-}
+alias_if_exists batcat bat
+alias_if_exists fdfind fd
+alias_if_exists nvim v
+alias_if_exists lazygit lg
+alias_if_exists lazydocker lzd
 
-setup_lazygit() {
-  if command -v lazygit > /dev/null 2>&1; then
-    alias lg='lazygit'
-  fi
-}
-
-setup_lazydocker() {
-  if command -v lazydocker > /dev/null 2>&1; then
-    alias lzd='lazydocker'
-  fi
-}
-
-setup_bat
-setup_fdfind
 setup_ls
-setup_lazygit
-setup_lazydocker
 
 alias c=clear
 alias ..='cd ..'
