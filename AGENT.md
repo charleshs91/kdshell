@@ -25,4 +25,4 @@ Before committing, run at least:
 bash -n debian/*.sh lib/*.sh
 ```
 
-If changing install behavior, review the diff carefully for destructive operations (`mv`, `rm`, redirects to user config files).
+For install changes, also review the diff for destructive operations (`mv`, `rm`, redirects to user config files). When practical, test in a disposable Debian LXC with a preexisting `~/.bashrc`, run the installer twice, and confirm user content is preserved with no duplicate config lines.
