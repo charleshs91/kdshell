@@ -11,6 +11,7 @@ APT_INSTALLS=(
   fd-find
   btop
   wget
+  stow
 )
 
 apt_install() {
