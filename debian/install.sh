@@ -111,6 +111,8 @@ main() {
   install_atuin
   install_zoxide
 
+  mise use -g lazygit
+
   CUSTOM_CONFIG_FILENAME="bash_config.sh"
   SOURCE_LINE="source \"${SCRIPT_DIR}/${CUSTOM_CONFIG_FILENAME}\""
   append_line_if_missing "$SOURCE_LINE"
