@@ -36,6 +36,8 @@ append_line_if_missing() {
 }
 
 install_neovim() {
+  mise use -g tree-sitter
+
   if command -v nvim > /dev/null 2>&1 || [[ -x "$HOME/.local/bin/nvim" ]]; then
     return
   fi
@@ -57,6 +59,7 @@ install_neovim() {
     status=$?
   fi
   rm -f "$tmp_file"
+
   return "$status"
 }
 
@@ -102,8 +105,8 @@ main() {
   touch "$SHELL_CONFIG_FILE"
 
   apt_install
-  install_neovim
   install_mise
+  install_neovim
   install_atuin
   install_zoxide
 
